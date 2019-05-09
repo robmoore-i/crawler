@@ -45,9 +45,10 @@ class ConcurrentCrawl {
     }
 
     private void getWordsForAllUrlsInPage(String rootUrl) throws IOException {
-        for (String url : urlRetriever.retrieve(getDocument(rootUrl))) {
-            futureWords = futureWords.append(Future.of(() -> getWordsFromUrl(url)));
-            iteratePages(url);
+        for (String path : urlRetriever.retrieve(getDocument(rootUrl))) {
+            final String fullUrl = rootUrl + "/" + path;
+            futureWords = futureWords.append(Future.of(() -> getWordsFromUrl(fullUrl)));
+            iteratePages(fullUrl);
         }
     }
 

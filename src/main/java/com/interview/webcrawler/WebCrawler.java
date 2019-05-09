@@ -40,6 +40,7 @@ class WebCrawler {
         try {
             return ResponseEntity.ok(concurrentCrawl.crawl(url).asJava().toString());
         } catch (IOException e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MALFORMED_REQUEST_RESPONSE);
         }
     }
