@@ -9,6 +9,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.IOException;
+
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -22,13 +24,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class WebCrawlerTest {
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @MockBean
-    WordRetriever wordRetriever;
+    private WordRetriever wordRetriever;
 
     @MockBean
-    UrlLoader urlLoader;
+    private UrlLoader urlLoader;
 
     @Test
     public void itReturnsAListOfWords() throws Exception {
@@ -44,5 +46,17 @@ public class WebCrawlerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json("['All','your','base','are','belong','to','us']"));
+    }
+
+    @Test
+    public void itFailsGracefully_WhenFailingToGetPage() throws Exception {
+        final String validUrl = "https://www.website.co.uk";
+
+        when(urlLoader.getPageDocument(validUrl)).thenThrow(new IOException());
+
+        mockMvc.perform(get("/webcrawler/crawl?url=" + validUrl))
+                .andDo(print())
+                .andExpect(status().is4xxClientError())
+                .andExpect(content().string("Invalid URL. Please make sure you include 'http://'"));
     }
 }
