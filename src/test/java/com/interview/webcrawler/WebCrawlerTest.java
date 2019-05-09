@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.IOException;
 
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -40,7 +39,7 @@ public class WebCrawlerTest {
         when(urlLoader.getPageDocument(validUrl)).thenReturn(htmlPage);
 
         List<String> wordList = List.of("All", "your", "base", "are", "belong", "to", "us");
-        when(wordRetriever.retrieveAllWords(any(PageDocument.class))).thenReturn(wordList);
+        when(wordRetriever.retrieveAll(any(PageDocument.class))).thenReturn(wordList);
 
         mockMvc.perform(get("/webcrawler/crawl?url=" + validUrl))
                 .andDo(print())

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -25,7 +25,7 @@ public class WordRetrieverTest {
         PageDocument pageDocument = mock(PageDocument.class);
         when(pageDocument.getText()).thenReturn("All your base are belong to us");
 
-        assertEquals(wordRetriever.retrieveAllWords(pageDocument), expected);
+        assertEquals(wordRetriever.retrieveAll(pageDocument), expected);
     }
 
     @Test
@@ -33,6 +33,6 @@ public class WordRetrieverTest {
         PageDocument pageDocument = mock(PageDocument.class);
         when(pageDocument.getText()).thenReturn("");
 
-        assertEquals(wordRetriever.retrieveAllWords(pageDocument), List.empty());
+        assertEquals(wordRetriever.retrieveAll(pageDocument), List.empty());
     }
 }

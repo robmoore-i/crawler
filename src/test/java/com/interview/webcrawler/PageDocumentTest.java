@@ -1,8 +1,9 @@
 package com.interview.webcrawler;
 
+import io.vavr.collection.List;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class PageDocumentTest {
 
@@ -15,10 +16,21 @@ public class PageDocumentTest {
     }
 
     @Test
-    public void itGetNoTextBackFromPage_WhenPageHasNoText() {
+    public void itGetsNoTextBackFromPage_WhenPageHasNoText() {
         String emptyHtmlPage = "<p> </p>";
         PageDocument pageDocument = new PageDocument(emptyHtmlPage);
 
         assertEquals(pageDocument.getText(), "");
+    }
+
+    @Test
+    public void itGetsUrlsFromPage_WhenPageHasUrls() {
+        String htmlPageWithUrls = "<div>" +
+                "<a href='/url1.html'> valid url1 </a> " +
+                "<a href='/url2.html'> valid url2 </a>" +
+                "</div>";
+        PageDocument pageDocument = new PageDocument(htmlPageWithUrls);
+
+        assertEquals(List.of("/url1.html", "/url2.html"), pageDocument.getUrls());
     }
 }

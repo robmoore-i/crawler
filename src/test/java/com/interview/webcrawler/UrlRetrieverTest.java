@@ -23,8 +23,8 @@ public class UrlRetrieverTest {
         List<String> expected = List.of("https://www.url1.com", "https://www.url2.com");
 
         PageDocument pageDocument = mock(PageDocument.class);
-        when(pageDocument.getUrls()).thenReturn("https://www.url1.com https://www.url2.com");
+        when(pageDocument.getUrls()).thenReturn(expected);
 
-        assertEquals(urlRetriever.retrieveAllUrls(pageDocument), expected);
+        assertEquals(expected, urlRetriever.retrieveAll(pageDocument));
     }
 }

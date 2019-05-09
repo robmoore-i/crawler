@@ -8,9 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.Collections;
-import java.util.List;
 
 @RestController
 @RequestMapping("/webcrawler")
@@ -29,7 +26,7 @@ public class WebCrawler {
     public ResponseEntity<String> crawl(@RequestParam("url") String url) {
         try {
             PageDocument pageDocument = new PageDocument(urlLoader.getPageDocument(url));
-            return ResponseEntity.ok(wordRetriever.retrieveAllWords(pageDocument).asJava().toString());
+            return ResponseEntity.ok(wordRetriever.retrieveAll(pageDocument).asJava().toString());
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MALFORMED_REQUEST_RESPONSE);
         }

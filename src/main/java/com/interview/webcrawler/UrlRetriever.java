@@ -4,15 +4,10 @@ import io.vavr.collection.List;
 import org.springframework.stereotype.Service;
 
 @Service
-class UrlRetriever extends PageRetriever {
-
-    List<String> retrieveAllUrls(PageDocument pageDocument) {
-        String[] urls = getContent(pageDocument);
-        return hasContent(urls) ? List.of(urls) : List.empty();
-    }
+class UrlRetriever implements PageRetriever {
 
     @Override
-    String[] getContent(PageDocument pageDocument) {
-        return pageDocument.getUrls().split(" ");
+    public List<String> retrieveAll(PageDocument pageDocument) {
+        return pageDocument.getUrls();
     }
 }

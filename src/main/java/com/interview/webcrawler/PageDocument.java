@@ -1,6 +1,9 @@
 package com.interview.webcrawler;
 
+import io.vavr.collection.List;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 class PageDocument {
 
@@ -14,7 +17,15 @@ class PageDocument {
         return Jsoup.parse(htmlPage).body().text();
     }
 
-    String getUrls() {
-        return null;
+    List<String> getUrls() {
+        final Elements a = Jsoup.parse(htmlPage).body().select("a");
+
+        List<String> elements = List.empty();
+        for (Element element : a) {
+            String absHref = element.attr("href");
+            elements = elements.append(absHref);
+        }
+
+        return elements;
     }
 }
