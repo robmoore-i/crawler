@@ -32,6 +32,9 @@ public class WebCrawlerTest {
     @MockBean
     private UrlLoader urlLoader;
 
+    @MockBean
+    private ConcurrentCrawl concurrentCrawl;
+
     @Test
     public void itReturnsAListOfWords() throws Exception {
         final String validUrl = "https://www.website.co.uk";
@@ -58,5 +61,17 @@ public class WebCrawlerTest {
                 .andDo(print())
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string("Invalid URL. Please make sure you include 'http://'"));
+    }
+
+    @Test
+    public void itReturnsAllWordsForConcurrentCrawl() throws Exception {
+        final String rootUrl = "https://www.website.co.uk";
+
+        when(concurrentCrawl.crawl(rootUrl)).thenReturn(List.of("subPage1_link", "subPage2_link", "subPage2"));
+
+        mockMvc.perform(get("/webcrawler/concurrent-crawl?url=" + rootUrl))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json("['subPage1_link', 'subPage2_link', 'subPage2']"));
     }
 }
