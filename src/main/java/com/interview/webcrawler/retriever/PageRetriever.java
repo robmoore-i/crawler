@@ -1,5 +1,6 @@
-package com.interview.webcrawler;
+package com.interview.webcrawler.retriever;
 
+import com.interview.webcrawler.PageDocument;
 import io.vavr.collection.List;
 
 interface PageRetriever {

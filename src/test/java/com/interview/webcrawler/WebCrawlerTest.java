@@ -1,5 +1,6 @@
 package com.interview.webcrawler;
 
+import com.interview.webcrawler.retriever.WordRetriever;
 import io.vavr.collection.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;

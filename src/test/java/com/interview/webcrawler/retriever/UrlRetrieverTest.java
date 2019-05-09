@@ -1,5 +1,6 @@
-package com.interview.webcrawler;
+package com.interview.webcrawler.retriever;
 
+import com.interview.webcrawler.PageDocument;
 import io.vavr.collection.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,5 +1,6 @@
 package com.interview.webcrawler;
 
+import com.interview.webcrawler.retriever.WordRetriever;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,11 +12,11 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/webcrawler")
-public class WebCrawler {
+class WebCrawler {
 
     private static final String MALFORMED_REQUEST_RESPONSE = "Invalid URL. Please make sure you include 'http://'";
-    private UrlLoader urlLoader;
-    private WordRetriever wordRetriever;
+    private final UrlLoader urlLoader;
+    private final WordRetriever wordRetriever;
 
     public WebCrawler(UrlLoader urlLoader, WordRetriever wordRetriever) {
         this.urlLoader = urlLoader;

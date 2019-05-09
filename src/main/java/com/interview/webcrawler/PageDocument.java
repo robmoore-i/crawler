@@ -5,7 +5,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-class PageDocument {
+public class PageDocument {
 
     private final String htmlPage;
 
@@ -13,11 +13,11 @@ class PageDocument {
         this.htmlPage = htmlPage;
     }
 
-    String getText() {
+    public String getText() {
         return Jsoup.parse(htmlPage).body().text();
     }
 
-    List<String> getUrls() {
+    public List<String> getUrls() {
         final Elements a = Jsoup.parse(htmlPage).body().select("a");
 
         List<String> elements = List.empty();
