@@ -37,10 +37,10 @@ public class WebCrawlerTest {
         final String validUrl = "https://www.website.co.uk";
 
         String htmlPage = "<p> All your base are belong to us </p>";
-        when(urlLoader.getPageDocument(validUrl)).thenReturn(htmlPage);
+        when(urlLoader.getHtmlPage(validUrl)).thenReturn(htmlPage);
 
         List<String> wordList = List.of("All", "your", "base", "are", "belong", "to", "us");
-        when(wordRetriever.retrieveAll(any(PageDocument.class))).thenReturn(wordList);
+        when(wordRetriever.retrieve(any(PageDocument.class))).thenReturn(wordList);
 
         mockMvc.perform(get("/webcrawler/crawl?url=" + validUrl))
                 .andDo(print())
@@ -52,7 +52,7 @@ public class WebCrawlerTest {
     public void itFailsGracefully_WhenFailingToGetPage() throws Exception {
         final String validUrl = "https://www.website.co.uk";
 
-        when(urlLoader.getPageDocument(validUrl)).thenThrow(new IOException());
+        when(urlLoader.getHtmlPage(validUrl)).thenThrow(new IOException());
 
         mockMvc.perform(get("/webcrawler/crawl?url=" + validUrl))
                 .andDo(print())

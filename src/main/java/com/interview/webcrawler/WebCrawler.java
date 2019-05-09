@@ -26,8 +26,18 @@ class WebCrawler {
     @RequestMapping(value = "/crawl", method = RequestMethod.GET)
     public ResponseEntity<String> crawl(@RequestParam("url") String url) {
         try {
-            PageDocument pageDocument = new PageDocument(urlLoader.getPageDocument(url));
-            return ResponseEntity.ok(wordRetriever.retrieveAll(pageDocument).asJava().toString());
+            PageDocument pageDocument = new PageDocument(urlLoader.getHtmlPage(url));
+            return ResponseEntity.ok(wordRetriever.retrieve(pageDocument).asJava().toString());
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MALFORMED_REQUEST_RESPONSE);
+        }
+    }
+
+    @RequestMapping(value = "/concurrent-crawl", method = RequestMethod.GET)
+    public ResponseEntity<String> concurrentCrawl(@RequestParam("url") String url) {
+        try {
+            PageDocument pageDocument = new PageDocument(urlLoader.getHtmlPage(url));
+            return ResponseEntity.ok(wordRetriever.retrieve(pageDocument).asJava().toString());
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MALFORMED_REQUEST_RESPONSE);
         }

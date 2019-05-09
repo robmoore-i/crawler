@@ -5,10 +5,11 @@ import io.vavr.collection.List;
 import org.springframework.stereotype.Service;
 
 @Service
+public
 class UrlRetriever implements PageRetriever {
 
     @Override
-    public List<String> retrieveAll(PageDocument pageDocument) {
+    public List<String> retrieve(PageDocument pageDocument) {
         return pageDocument.getUrls();
     }
 }

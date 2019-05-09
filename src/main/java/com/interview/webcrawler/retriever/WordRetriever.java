@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 public class WordRetriever implements PageRetriever {
 
     @Override
-    public List<String> retrieveAll(PageDocument pageDocument) {
+    public List<String> retrieve(PageDocument pageDocument) {
         String[] words = getContent(pageDocument);
         return hasContent(words) ? List.of(words) : List.empty();
     }

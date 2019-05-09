@@ -27,7 +27,7 @@ public class WordRetrieverTest {
         PageDocument pageDocument = mock(PageDocument.class);
         when(pageDocument.getText()).thenReturn("All your base are belong to us");
 
-        assertEquals(wordRetriever.retrieveAll(pageDocument), expected);
+        assertEquals(wordRetriever.retrieve(pageDocument), expected);
     }
 
     @Test
@@ -35,6 +35,6 @@ public class WordRetrieverTest {
         PageDocument pageDocument = mock(PageDocument.class);
         when(pageDocument.getText()).thenReturn("");
 
-        assertEquals(wordRetriever.retrieveAll(pageDocument), List.empty());
+        assertEquals(wordRetriever.retrieve(pageDocument), List.empty());
     }
 }

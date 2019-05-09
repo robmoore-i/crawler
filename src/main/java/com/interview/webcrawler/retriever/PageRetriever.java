@@ -8,5 +8,5 @@ interface PageRetriever {
         return content.length > 0 && !content[0].equals("");
     }
 
-    List<String> retrieveAll(PageDocument pageDocument);
+    List<String> retrieve(PageDocument pageDocument);
 }

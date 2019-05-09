@@ -8,7 +8,7 @@ import java.io.IOException;
 @Service
 class UrlLoader {
 
-    public String getPageDocument(String pageUrl) throws IOException {
+    String getHtmlPage(String pageUrl) throws IOException {
         return Jsoup.connect(pageUrl).get().html();
     }
 }

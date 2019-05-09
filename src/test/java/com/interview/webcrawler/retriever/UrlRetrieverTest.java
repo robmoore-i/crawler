@@ -26,6 +26,6 @@ public class UrlRetrieverTest {
         PageDocument pageDocument = mock(PageDocument.class);
         when(pageDocument.getUrls()).thenReturn(expected);
 
-        assertEquals(expected, urlRetriever.retrieveAll(pageDocument));
+        assertEquals(expected, urlRetriever.retrieve(pageDocument));
     }
 }
