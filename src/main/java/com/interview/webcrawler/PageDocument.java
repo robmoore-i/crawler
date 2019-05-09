@@ -6,11 +6,15 @@ class PageDocument {
 
     private final String htmlPage;
 
-    public PageDocument(String htmlPage) {
+    PageDocument(String htmlPage) {
         this.htmlPage = htmlPage;
     }
 
-    public String getText() {
+    String getText() {
         return Jsoup.parse(htmlPage).body().text();
+    }
+
+    String getUrls() {
+        return null;
     }
 }
