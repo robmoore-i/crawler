@@ -20,7 +20,7 @@ public class PageDocument implements HtmlPageDocument {
 
     @Override
     public List<String> getUrls() {
-        final Elements a = Jsoup.parse(htmlPage).body().select("a");
+        Elements a = Jsoup.parse(htmlPage).body().select("a");
 
         List<String> elements = List.empty();
         for (Element element : a) {

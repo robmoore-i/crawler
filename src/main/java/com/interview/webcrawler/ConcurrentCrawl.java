@@ -11,7 +11,7 @@ import java.io.IOException;
 class ConcurrentCrawl implements Crawler {
     private final UrlLoader urlLoader;
     private final UrlRetriever urlRetriever;
-    private DocumentParser documentParser;
+    private final DocumentParser documentParser;
 
     private List<String> wordList = List.empty();
     private List<Future<List<String>>> futureWords = List.empty();

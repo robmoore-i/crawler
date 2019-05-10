@@ -8,8 +8,8 @@ import java.io.IOException;
 
 @Service
 public class DocumentParser {
-    private UrlLoader urlLoader;
-    private WordRetriever wordRetriever;
+    private final UrlLoader urlLoader;
+    private final WordRetriever wordRetriever;
 
     public DocumentParser(UrlLoader urlLoader, WordRetriever wordRetriever) {
         this.urlLoader = urlLoader;

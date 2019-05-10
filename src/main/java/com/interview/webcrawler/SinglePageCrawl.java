@@ -8,8 +8,8 @@ import java.io.IOException;
 
 @Service
 public class SinglePageCrawl implements Crawler {
-    private UrlLoader urlLoader;
-    private WordRetriever wordRetriever;
+    private final UrlLoader urlLoader;
+    private final WordRetriever wordRetriever;
 
     public SinglePageCrawl(UrlLoader urlLoader, WordRetriever wordRetriever) {
         this.urlLoader = urlLoader;

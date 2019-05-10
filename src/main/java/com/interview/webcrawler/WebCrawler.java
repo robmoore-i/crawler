@@ -13,9 +13,9 @@ import java.io.IOException;
 @RequestMapping("/webcrawler")
 class WebCrawler {
 
-    public static final String MALFORMED_REQUEST_RESPONSE = "Invalid URL. Please make sure you include 'http://'";
-    private ConcurrentCrawl concurrentCrawl;
-    private SinglePageCrawl singlePageCrawl;
+    private static final String MALFORMED_REQUEST_RESPONSE = "Invalid URL. Please make sure you include 'http://'";
+    private final ConcurrentCrawl concurrentCrawl;
+    private final SinglePageCrawl singlePageCrawl;
 
     public WebCrawler(SinglePageCrawl singlePageCrawl, ConcurrentCrawl concurrentCrawl) {
         this.singlePageCrawl = singlePageCrawl;
