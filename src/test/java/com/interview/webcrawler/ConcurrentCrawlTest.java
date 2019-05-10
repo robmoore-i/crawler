@@ -1,7 +1,6 @@
 package com.interview.webcrawler;
 
 import com.interview.webcrawler.retriever.UrlRetriever;
-import com.interview.webcrawler.retriever.WordRetriever;
 import io.vavr.collection.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,19 +9,23 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {ConcurrentCrawl.class, WordRetriever.class, UrlRetriever.class})
+@ContextConfiguration(classes = {ConcurrentCrawl.class, UrlRetriever.class, DocumentParser.class})
 public class ConcurrentCrawlTest {
 
     @Autowired
-    private
-    ConcurrentCrawl concurrentCrawl;
+    private ConcurrentCrawl concurrentCrawl;
 
     @MockBean
     private UrlLoader urlLoader;
+
+    @MockBean
+    private DocumentParser documentParser;
 
     @Test
     public void itCrawlsSinglePageInsideRootPage_WhenRootPageHasOneUrl() throws Exception {
@@ -34,8 +37,10 @@ public class ConcurrentCrawlTest {
 
         when(urlLoader.getHtmlPage(rootUrl)).thenReturn(rootPage);
         when(urlLoader.getHtmlPage(rootUrl + "/" + subPage1Url)).thenReturn(subPage1);
+        when(documentParser.getWordsFromUrl(rootUrl)).thenReturn(List.of("subPage1"));
+        when(documentParser.getWordsFromUrl(rootUrl + "/" + subPage1Url)).thenReturn(List.of("subPage1_link"));
 
-        assertEquals(List.of("subPage1_link", "subPage1"), concurrentCrawl.crawl(rootUrl));
+        assertThat(concurrentCrawl.crawl(rootUrl), hasItems("subPage1_link", "subPage1"));
     }
 
     @Test
@@ -51,6 +56,9 @@ public class ConcurrentCrawlTest {
         when(urlLoader.getHtmlPage(rootUrl)).thenReturn(rootPage);
         when(urlLoader.getHtmlPage(rootUrl + "/" + subPage1Url)).thenReturn(subPage1);
         when(urlLoader.getHtmlPage(rootUrl + "/" + subPage1Url + "/" + subPage2Url)).thenReturn(subPage2);
+        when(documentParser.getWordsFromUrl(rootUrl)).thenReturn(List.of("subPage1_link"));
+        when(documentParser.getWordsFromUrl(rootUrl + "/" + subPage1Url)).thenReturn(List.of("subPage2_link"));
+        when(documentParser.getWordsFromUrl(rootUrl + "/" + subPage1Url + "/" + subPage2Url)).thenReturn(List.of("subPage2"));
 
         assertEquals(List.of("subPage1_link", "subPage2_link", "subPage2"), concurrentCrawl.crawl(rootUrl));
     }
