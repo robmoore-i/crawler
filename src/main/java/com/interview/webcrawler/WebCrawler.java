@@ -11,15 +11,15 @@ import java.util.List;
 @RequestMapping("/webcrawler")
 class WebCrawler {
 
-    private final ConcurrentCrawl concurrentCrawl;
-    private final SingleCrawl singleCrawl;
+    private final Crawl concurrentCrawl;
+    private final Crawl singleCrawl;
 
     public WebCrawler(SingleCrawl singleCrawl, ConcurrentCrawl concurrentCrawl) {
         this.concurrentCrawl = concurrentCrawl;
         this.singleCrawl = singleCrawl;
     }
 
-    @RequestMapping(value = "/crawl", method = RequestMethod.GET)
+    @RequestMapping(value = "/single-crawl", method = RequestMethod.GET)
     public List<String> crawl(@RequestParam("url") String url) {
         return singleCrawl.crawl(url).asJava();
     }

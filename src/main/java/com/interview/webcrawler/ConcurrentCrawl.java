@@ -11,22 +11,21 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 @Service
-class ConcurrentCrawl {
+class ConcurrentCrawl extends Crawl {
     private final Logger logger = LoggerFactory.getLogger(ConcurrentCrawl.class);
-    private final DocumentRetriever documentRetriever;
-    private final WordRetriever wordRetriever;
     private final UrlRetriever urlRetriever;
+    private final DocumentRetriever documentRetriever;
 
-    private List<String> wordList = List.empty();
     private List<Future<List<String>>> futureWords = List.empty();
 
     public ConcurrentCrawl(DocumentRetriever documentRetriever, WordRetriever wordRetriever, UrlRetriever urlRetriever) {
+        super(documentRetriever, wordRetriever);
         this.documentRetriever = documentRetriever;
-        this.wordRetriever = wordRetriever;
         this.urlRetriever = urlRetriever;
     }
 
-    List<String> crawl(String rootUrl) {
+    @Override
+    public List<String> crawl(String rootUrl) {
         saveWords(getWordsFromUrl(rootUrl));
 
         getWordsForAllUrlsInPage(rootUrl);
@@ -53,15 +52,5 @@ class ConcurrentCrawl {
 
     private void saveWords(List<String> wordsFromUrl) {
         wordList = wordList.appendAll(wordsFromUrl);
-    }
-
-    private List<String> getWordsFromUrl(String rootUrl) {
-        try {
-            PageDocument rootDocument = documentRetriever.getDocument(rootUrl);
-            return wordRetriever.retrieve(rootDocument);
-        } catch (IOException e) {
-            logger.debug("Failed to fetch page for: " + rootUrl);
-            return List.empty();
-        }
     }
 }
