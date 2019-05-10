@@ -11,10 +11,10 @@ import java.io.IOException;
 class ConcurrentCrawl implements Crawler {
     private final UrlLoader urlLoader;
     private final UrlRetriever urlRetriever;
+    private DocumentParser documentParser;
 
     private List<String> wordList = List.empty();
     private List<Future<List<String>>> futureWords = List.empty();
-    private DocumentParser documentParser;
 
     public ConcurrentCrawl(UrlLoader urlLoader, UrlRetriever urlRetriever, DocumentParser documentParser) {
         this.urlLoader = urlLoader;
@@ -45,7 +45,7 @@ class ConcurrentCrawl implements Crawler {
 
     private void getWordsForAllUrlsInPage(String rootUrl) throws IOException {
         for (String path : urlRetriever.retrieve(getDocument(rootUrl))) {
-            final String fullUrl = rootUrl + "/" + path;
+            String fullUrl = rootUrl + "/" + path;
             futureWords = futureWords.append(Future.of(() -> documentParser.getWordsFromUrl(fullUrl)));
             iteratePages(fullUrl);
         }
