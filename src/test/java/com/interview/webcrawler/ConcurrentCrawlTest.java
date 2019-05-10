@@ -86,4 +86,13 @@ public class ConcurrentCrawlTest {
 
         assertEquals(List.of(rootPageContent, subPage1Content, subPage2Content), concurrentCrawl.crawl(rootUrl));
     }
+
+    @Test
+    public void itSkipsPage_WhenPageFetchFails() throws IOException {
+        mockPage(rootPageContent, List.of(subPage1Link), rootUrl);
+        mockPage(subPage1Content, List.empty(), rootUrl + "/" + subPage1Link);
+        when(documentRetriever.getDocument(rootUrl + "/" + subPage1Link)).thenThrow(new IOException());
+
+        assertEquals(List.of(rootPageContent), concurrentCrawl.crawl(rootUrl));
+    }
 }
