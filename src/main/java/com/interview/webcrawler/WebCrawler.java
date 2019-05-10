@@ -13,7 +13,7 @@ import java.io.IOException;
 @RequestMapping("/webcrawler")
 class WebCrawler {
 
-    private static final String MALFORMED_REQUEST_RESPONSE = "Invalid URL. Please make sure you include 'http://'";
+    public static final String MALFORMED_REQUEST_RESPONSE = "Invalid URL. Please make sure you include 'http://'";
     private ConcurrentCrawl concurrentCrawl;
     private SinglePageCrawl singlePageCrawl;
 
@@ -24,19 +24,21 @@ class WebCrawler {
 
     @RequestMapping(value = "/crawl", method = RequestMethod.GET)
     public ResponseEntity<String> crawl(@RequestParam("url") String url) {
-        try {
-            return ResponseEntity.ok(singlePageCrawl.crawl(url).asJava().toString());
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MALFORMED_REQUEST_RESPONSE);
-        }
+        return crawlerResponse(singlePageCrawl, url);
     }
 
     @RequestMapping(value = "/concurrent-crawl", method = RequestMethod.GET)
     public ResponseEntity<String> concurrentCrawl(@RequestParam("url") String url) {
+        return crawlerResponse(concurrentCrawl, url);
+    }
+
+    private ResponseEntity<String> crawlerResponse(Crawler crawler, String url) {
         try {
-            return ResponseEntity.ok(concurrentCrawl.crawl(url).asJava().toString());
+            return ResponseEntity.ok(crawler.crawl(url).asJava().toString());
         } catch (IOException e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MALFORMED_REQUEST_RESPONSE);
         }
     }
+
 }

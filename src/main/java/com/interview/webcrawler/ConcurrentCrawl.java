@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 @Service
-class ConcurrentCrawl {
-
+class ConcurrentCrawl implements Crawler {
     private final UrlLoader urlLoader;
     private final UrlRetriever urlRetriever;
 
@@ -23,7 +22,8 @@ class ConcurrentCrawl {
         this.documentParser = documentParser;
     }
 
-    List<String> crawl(String rootUrl) throws IOException {
+    @Override
+    public List<String> crawl(String rootUrl) throws IOException {
         saveWords(documentParser.getWordsFromUrl(rootUrl));
 
         iteratePages(rootUrl);
@@ -51,8 +51,12 @@ class ConcurrentCrawl {
         }
     }
 
-    private PageDocument getDocument(String url) throws IOException {
-        return new PageDocument(getHtmlPage(url));
+    private HtmlPageDocument getDocument(String url) {
+        try {
+            return new PageDocument(getHtmlPage(url));
+        } catch (IOException e) {
+            return new EmptyHtmlDocument();
+        }
     }
 
     //TODO: Add memoization

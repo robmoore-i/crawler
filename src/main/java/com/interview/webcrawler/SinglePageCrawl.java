@@ -7,8 +7,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 @Service
-public class SinglePageCrawl {
-
+public class SinglePageCrawl implements Crawler {
     private UrlLoader urlLoader;
     private WordRetriever wordRetriever;
 
@@ -17,8 +16,9 @@ public class SinglePageCrawl {
         this.wordRetriever = wordRetriever;
     }
 
-    List<String> crawl(String url) throws IOException {
-        PageDocument pageDocument = new PageDocument(urlLoader.getHtmlPage(url));
-        return wordRetriever.retrieve(pageDocument);
+    @Override
+    public List<String> crawl(String url) throws IOException {
+        HtmlPageDocument htmlPageDocument = new PageDocument(urlLoader.getHtmlPage(url));
+        return wordRetriever.retrieve(htmlPageDocument);
     }
 }

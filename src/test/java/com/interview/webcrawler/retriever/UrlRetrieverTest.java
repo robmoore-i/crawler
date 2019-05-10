@@ -1,5 +1,6 @@
 package com.interview.webcrawler.retriever;
 
+import com.interview.webcrawler.HtmlPageDocument;
 import com.interview.webcrawler.PageDocument;
 import io.vavr.collection.List;
 import org.junit.Test;
@@ -23,7 +24,7 @@ public class UrlRetrieverTest {
     public void itRetrievesAllUrlsFromPage_WhenPageHasURls() {
         List<String> expected = List.of("https://www.url1.com", "https://www.url2.com");
 
-        PageDocument pageDocument = mock(PageDocument.class);
+        HtmlPageDocument pageDocument = mock(PageDocument.class);
         when(pageDocument.getUrls()).thenReturn(expected);
 
         assertEquals(expected, urlRetriever.retrieve(pageDocument));

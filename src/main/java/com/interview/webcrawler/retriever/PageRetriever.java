@@ -1,6 +1,6 @@
 package com.interview.webcrawler.retriever;
 
-import com.interview.webcrawler.PageDocument;
+import com.interview.webcrawler.HtmlPageDocument;
 import io.vavr.collection.List;
 
 interface PageRetriever {
@@ -8,5 +8,5 @@ interface PageRetriever {
         return content.length > 0 && !content[0].equals("");
     }
 
-    List<String> retrieve(PageDocument pageDocument);
+    List<String> retrieve(HtmlPageDocument htmlPageDocument);
 }

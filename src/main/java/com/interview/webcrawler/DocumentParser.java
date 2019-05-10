@@ -17,7 +17,7 @@ public class DocumentParser {
     }
 
     List<String> getWordsFromUrl(String rootUrl) throws IOException {
-        PageDocument rootDocument = new PageDocument(urlLoader.getHtmlPage(rootUrl));
+        HtmlPageDocument rootDocument = new PageDocument(urlLoader.getHtmlPage(rootUrl));
         return wordRetriever.retrieve(rootDocument);
     }
 }

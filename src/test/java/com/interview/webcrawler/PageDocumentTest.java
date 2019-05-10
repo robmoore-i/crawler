@@ -10,7 +10,7 @@ public class PageDocumentTest {
     @Test
     public void itGetsTextFromPage_WhenPageHasText() {
         String htmlPageWithText = "<p> All your base are belong to us </p>";
-        PageDocument pageDocument = new PageDocument(htmlPageWithText);
+        HtmlPageDocument pageDocument = new PageDocument(htmlPageWithText);
 
         assertEquals(pageDocument.getText(), "All your base are belong to us");
     }
@@ -18,7 +18,7 @@ public class PageDocumentTest {
     @Test
     public void itGetsNoTextBackFromPage_WhenPageHasNoText() {
         String emptyHtmlPage = "<p> </p>";
-        PageDocument pageDocument = new PageDocument(emptyHtmlPage);
+        HtmlPageDocument pageDocument = new PageDocument(emptyHtmlPage);
 
         assertEquals(pageDocument.getText(), "");
     }
@@ -29,7 +29,7 @@ public class PageDocumentTest {
                 "<a href='/url1.html'> valid url1 </a> " +
                 "<a href='/url2.html'> valid url2 </a>" +
                 "</div>";
-        PageDocument pageDocument = new PageDocument(htmlPageWithUrls);
+        HtmlPageDocument pageDocument = new PageDocument(htmlPageWithUrls);
 
         assertEquals(List.of("/url1.html", "/url2.html"), pageDocument.getUrls());
     }

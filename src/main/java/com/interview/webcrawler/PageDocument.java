@@ -5,7 +5,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class PageDocument {
+public class PageDocument implements HtmlPageDocument {
 
     private final String htmlPage;
 
@@ -13,10 +13,12 @@ public class PageDocument {
         this.htmlPage = htmlPage;
     }
 
+    @Override
     public String getText() {
         return Jsoup.parse(htmlPage).body().text();
     }
 
+    @Override
     public List<String> getUrls() {
         final Elements a = Jsoup.parse(htmlPage).body().select("a");
 
