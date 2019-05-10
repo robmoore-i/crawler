@@ -17,7 +17,7 @@ class WebCrawler {
     private static final String MALFORMED_REQUEST_RESPONSE = "Invalid URL. Please make sure you include 'http://'";
     private final UrlLoader urlLoader;
     private final WordRetriever wordRetriever;
-    private ConcurrentCrawl concurrentCrawl;
+    private final ConcurrentCrawl concurrentCrawl;
 
     public WebCrawler(UrlLoader urlLoader, WordRetriever wordRetriever, ConcurrentCrawl concurrentCrawl) {
         this.urlLoader = urlLoader;

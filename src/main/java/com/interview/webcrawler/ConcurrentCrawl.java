@@ -11,15 +11,15 @@ import java.io.IOException;
 @Service
 class ConcurrentCrawl {
 
-    private final UrlLoader urlLoader;
+    private final DocumentRetriever documentRetriever;
     private final WordRetriever wordRetriever;
     private final UrlRetriever urlRetriever;
 
     private List<String> wordList = List.empty();
     private List<Future<List<String>>> futureWords = List.empty();
 
-    public ConcurrentCrawl(UrlLoader urlLoader, WordRetriever wordRetriever, UrlRetriever urlRetriever) {
-        this.urlLoader = urlLoader;
+    public ConcurrentCrawl(DocumentRetriever documentRetriever, WordRetriever wordRetriever, UrlRetriever urlRetriever) {
+        this.documentRetriever = documentRetriever;
         this.wordRetriever = wordRetriever;
         this.urlRetriever = urlRetriever;
     }
@@ -27,7 +27,7 @@ class ConcurrentCrawl {
     List<String> crawl(String rootUrl) throws IOException {
         saveWords(getWordsFromUrl(rootUrl));
 
-        iteratePages(rootUrl);
+        getWordsForAllUrlsInPage(rootUrl);
 
         for (Future<List<String>> f : futureWords) {
             saveWords(f.getOrElse(List.empty()));
@@ -36,33 +36,21 @@ class ConcurrentCrawl {
         return wordList;
     }
 
-    private void iteratePages(String rootUrl) throws IOException {
-        getWordsForAllUrlsInPage(rootUrl);
+    private void getWordsForAllUrlsInPage(String rootUrl) throws IOException {
+        final PageDocument document = documentRetriever.getDocument(rootUrl);
+        for (String path : urlRetriever.retrieve(document)) {
+            final String fullUrl = rootUrl + "/" + path;
+            futureWords = futureWords.append(Future.of(() -> getWordsFromUrl(fullUrl)));
+            getWordsForAllUrlsInPage(fullUrl);
+        }
     }
 
     private void saveWords(List<String> wordsFromUrl) {
         wordList = wordList.appendAll(wordsFromUrl);
     }
 
-    private void getWordsForAllUrlsInPage(String rootUrl) throws IOException {
-        for (String path : urlRetriever.retrieve(getDocument(rootUrl))) {
-            final String fullUrl = rootUrl + "/" + path;
-            futureWords = futureWords.append(Future.of(() -> getWordsFromUrl(fullUrl)));
-            iteratePages(fullUrl);
-        }
-    }
-
     private List<String> getWordsFromUrl(String rootUrl) throws IOException {
-        PageDocument rootDocument = new PageDocument(getHtmlPage(rootUrl));
+        PageDocument rootDocument = documentRetriever.getDocument(rootUrl);
         return wordRetriever.retrieve(rootDocument);
-    }
-
-    private PageDocument getDocument(String url) throws IOException {
-        return new PageDocument(getHtmlPage(url));
-    }
-
-    //TODO: Add memoization
-    private String getHtmlPage(String rootUrl) throws IOException {
-        return urlLoader.getHtmlPage(rootUrl);
     }
 }
