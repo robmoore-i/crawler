@@ -1,6 +1,5 @@
 package com.interview.webcrawler;
 
-import com.interview.webcrawler.retriever.WordRetriever;
 import io.vavr.collection.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.IOException;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -27,10 +25,7 @@ public class WebCrawlerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private WordRetriever wordRetriever;
-
-    @MockBean
-    private UrlLoader urlLoader;
+    private SinglePageCrawl singlePageCrawl;
 
     @MockBean
     private ConcurrentCrawl concurrentCrawl;
@@ -39,11 +34,7 @@ public class WebCrawlerTest {
     public void itReturnsAListOfWords() throws Exception {
         final String validUrl = "https://www.website.co.uk";
 
-        String htmlPage = "<p> All your base are belong to us </p>";
-        when(urlLoader.getHtmlPage(validUrl)).thenReturn(htmlPage);
-
-        List<String> wordList = List.of("All", "your", "base", "are", "belong", "to", "us");
-        when(wordRetriever.retrieve(any(PageDocument.class))).thenReturn(wordList);
+        when(singlePageCrawl.crawl(validUrl)).thenReturn(List.of("All", "your", "base", "are", "belong", "to", "us"));
 
         mockMvc.perform(get("/webcrawler/crawl?url=" + validUrl))
                 .andDo(print())
@@ -55,7 +46,7 @@ public class WebCrawlerTest {
     public void itFailsGracefully_WhenFailingToGetPage() throws Exception {
         final String validUrl = "https://www.website.co.uk";
 
-        when(urlLoader.getHtmlPage(validUrl)).thenThrow(new IOException());
+        when(singlePageCrawl.crawl(validUrl)).thenThrow(new IOException());
 
         mockMvc.perform(get("/webcrawler/crawl?url=" + validUrl))
                 .andDo(print())
